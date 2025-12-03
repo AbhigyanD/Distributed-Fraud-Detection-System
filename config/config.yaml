@@ -1,0 +1,48 @@
+# Distributed Fraud Detection System Configuration
+
+kafka:
+  bootstrap_servers: "localhost:9092"
+  topic_transactions: "transactions"
+  topic_alerts: "fraud_alerts"
+  consumer_group: "fraud_detection_group"
+  batch_size: 1000
+  auto_offset_reset: "earliest"
+
+spark:
+  app_name: "FraudDetectionSystem"
+  master: "local[*]"
+  executor_memory: "4g"
+  driver_memory: "2g"
+  max_result_size: "2g"
+  spark_sql_shuffle_partitions: 200
+
+mlflow:
+  tracking_uri: "file:./mlruns"
+  experiment_name: "fraud_detection"
+  model_registry: "fraud_models"
+
+graph:
+  embedding_dim: 128
+  num_layers: 2
+  hidden_dim: 64
+  learning_rate: 0.001
+  batch_size: 512
+  epochs: 50
+  anomaly_threshold: 0.7
+
+ensemble:
+  models:
+    - graphsage
+    - xgboost
+    - isolation_forest
+  weights:
+    graphsage: 0.5
+    xgboost: 0.3
+    isolation_forest: 0.2
+  voting_threshold: 0.6
+
+processing:
+  window_size_seconds: 60
+  checkpoint_interval: "10 minutes"
+  max_transactions_per_hour: 1000000
+
